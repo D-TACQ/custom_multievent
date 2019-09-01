@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo multievent.init
+echo +++multievent.init
 
 source /mnt/local/sysconfig/acq400.sh
 
@@ -16,5 +16,7 @@ killall -s SIGHUP inetd
 [ ! z $MULTI_EVENT_DISK ] && mev_disk_mon $MULTI_EVENT_DISK &
 
 ln -s /usr/local/bin/multi_event /etc/acq400/1/
+
+mknod /dev/acq400.14.ev c 242 64
 
 

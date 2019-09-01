@@ -23,7 +23,7 @@ while [ 1 ]; do
 			set_state 3
 			for file in /tmp/event-*; do
 				if [ -e $file ]; then
-					mv $file /stick/$file; sync;sync
+					mv $file /stick/; sync;sync
 					logger -t mev_disk_mon store $file
 					set_state 4
 				fi
