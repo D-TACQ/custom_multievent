@@ -1,5 +1,7 @@
 #!/bin/sh
 
+nice 20
+
 CLK=$(get.site 1 CLK)
 
 # make sure clock init has happened
