@@ -13,7 +13,7 @@ EOF
 
 killall -s SIGHUP inetd
 
-[ ! z "$MULTI_EVENT_DISK" ] && mev_disk_mon $MULTI_EVENT_DISK &
+[ ! -z "$MULTI_EVENT_DISK" ] && mev_disk_mon $MULTI_EVENT_DISK &
 
 ln -s /usr/local/bin/multi_event /etc/acq400/1/
 
