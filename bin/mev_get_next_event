@@ -5,7 +5,7 @@ ssb=$(get.site 0 ssb)
 ln1=$(($ssb-1))
 
 for file in $root/event-*.dat; do
-	[ -e $file ] && printf "%$ln1s\n" $file
+        [ -e $file ] && printf "%-${ln1}s\n" $file
 	cat $file
 	rm $file
 	exit 0
