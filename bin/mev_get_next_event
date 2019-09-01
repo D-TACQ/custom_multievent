@@ -1,0 +1,13 @@
+#!/bin/sh
+
+ssb=$(get.site 0 ssb)
+ln1=$(($ssb-1))
+
+for file in /tmp/event-*bin; do
+	[ -e $file ] && printf "%$ln1s\n" $file
+	cat $file
+	rm $file
+	exit 0
+done
+
+

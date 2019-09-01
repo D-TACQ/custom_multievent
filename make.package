@@ -1,0 +1,26 @@
+#!/bin/bash
+# Quench Detect, a custom DSP package
+DC=$(date +%y%m%d%H%M)
+SEQ=35
+PKG=custom_multievent
+PACKAGES=../../PACKAGES.OPT
+
+rm -Rf opkg/*
+mkdir -p opkg/usr/local/bin \
+	opkg/usr/local/init \
+	opkg/usr/local/CARE \
+	opkg/usr/local/epics \
+	release
+ 
+cp -a CARE/* opkg/usr/local/CARE
+cp bin/* opkg/usr/local/bin
+cp init/* opkg/usr/local/init
+cp README opkg/usr/local/init/$PKG-README
+cp -a epics/* opkg/usr/local/epics/
+
+
+tar cvzf release/${SEQ}-${PKG}-${DC}.tgz -C opkg .
+ls -l release/${SEQ}-${PKG}-${DC}.tgz
+rm -f ${PACKAGES}/${SEQ}-${PKG}*
+cp release/${SEQ}-${PKG}-${DC}.tgz ${PACKAGES}
+

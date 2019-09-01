@@ -1,0 +1,20 @@
+#!/bin/sh
+
+echo multievent.init
+
+source /mnt/local/sysconfig/acq400.sh
+
+[ ! -z $MULTI_EVENT ] && echo "MULTI_EVENT=$MULTI_EVENT" > /dev/shm/multi_event_settings
+
+
+cat >>/etc/inetd.conf << EOF
+53555 stream tcp nowait root mev_get_next_event mev_get_next_event dontcare
+EOF
+
+killall -s SIGHUP inetd
+
+[ ! z $MULTI_EVENT_DISK ] && mev_disk_mon $MULTI_EVENT_DISK &
+
+ln -s /usr/local/bin/multi_event /etc/acq400/1/
+
+

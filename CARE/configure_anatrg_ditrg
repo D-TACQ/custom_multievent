@@ -1,0 +1,29 @@
+#!/bin/sh
+
+CLK=$(get.site 1 CLK)
+
+# make sure clock init has happened
+[ "$CLK" != "CLK external" ] && /usr/local/CARE/acq1001\+acq42x.init
+
+set.site 1 CLKDIV 10
+
+# source EVT.d1 from DSP MOD (anatrg)
+set.site 0 SIG:EVENT_SRC:1 MOD
+# source EVT.d3 from SITE2 MOD (COS)
+set.site 0 SIG:EVENT_SRC:3 MOD
+
+# select CAPTURE EVENT0 as anatr
+set.site 1 EVENT0 enable
+set.site 1 EVENT0:DX d1
+set.site 1 EVENT0:SENSE rising
+
+
+# select CAPTURE EVENT1 as anatr
+set.site 1 EVENT1 enable
+set.site 1 EVENT1:DX d3
+set.site 1 EVENT1:SENSE rising
+
+
+
+
+

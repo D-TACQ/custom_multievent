@@ -1,0 +1,35 @@
+#!/bin/sh
+# mev_disk_mon
+
+ROOT=/stick
+SFILE=/dev/shm/mev_disk_mon
+
+set_state() {
+	echo ${1:-error} > $SFILE
+}
+
+mkdir $ROOT
+
+while [ 1 ]; do
+	if [ ! -e /dev/sda1 ]; then
+		echo 1 > /sys/bus/usb/devices/1-1.1/bConfigurationValue
+		set_state 1
+	else
+		mount | grep -q $ROOT
+		if [ $? -eq 1 ]; then
+			mount /dev/sda1 $ROOT
+			set_state 2
+		else
+			set_state 3
+			for file in /tmp/event-*; do
+				if [ -e $file ]; then
+					mv $file /stick/$file; sync;sync
+					logger -t mev_disk_mon store $file
+					set_state 4
+				fi
+			done
+		fi
+	fi
+	sleep 7
+done
+

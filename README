@@ -1,0 +1,14 @@
+# README custom_multievent
+
+multievent copies data surrounding multiple events to /tmp/
+
+this data is presented as a service, and optionally stored to local disk
+
+set these files:
+
+/mnt/local/acq420_custom
+DRVR_CUSTOM=event1_feeds_ev_device=1
+
+/mnt/local/sysconfig/acq400.sh
+MULTI_EVENT=pre,post,max
+MULTI_EVENT_DISK=yes
