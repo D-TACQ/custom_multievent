@@ -1,9 +1,10 @@
 #!/bin/sh
 
+root=${1:/tmp}
 ssb=$(get.site 0 ssb)
 ln1=$(($ssb-1))
 
-for file in /tmp/event-*bin; do
+for file in $root/event-*.dat; do
 	[ -e $file ] && printf "%$ln1s\n" $file
 	cat $file
 	rm $file

@@ -8,7 +8,8 @@ source /mnt/local/sysconfig/acq400.sh
 
 
 cat >>/etc/inetd.conf << EOF
-53555 stream tcp nowait root mev_get_next_event mev_get_next_event dontcare
+53555 stream tcp nowait root mev_get_next_event mev_get_next_event /tmp
+53556 stream tcp nowait root mev_get_next_event mev_get_next_event /stick
 EOF
 
 killall -s SIGHUP inetd
