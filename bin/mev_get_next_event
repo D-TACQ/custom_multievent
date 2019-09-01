@@ -1,6 +1,6 @@
 #!/bin/sh
 
-root=${1:/tmp}
+root=${1:-/tmp}
 ssb=$(get.site 0 ssb)
 ln1=$(($ssb-1))
 
