@@ -1,6 +1,6 @@
 #!/bin/sh
 
-nice 20
+
 
 CLK=$(get.site 1 CLK)
 

@@ -8,7 +8,6 @@ set_state() {
 	echo ${1:-error} > $SFILE
 }
 
-nice
 mkdir $ROOT
 
 while [ 1 ]; do
