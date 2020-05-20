@@ -1,0 +1,13 @@
+#!/bin/sh
+# mev_disk_mon
+
+while [ 1 ]; do
+	for file in /tmp/event-*; do
+		if [ -e $file ]; then
+			logger -t mev_null_mon deleted $(ls -l $file)
+			rm $file
+		fi
+		sleep 2
+	done
+done
+

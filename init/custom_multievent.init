@@ -5,7 +5,7 @@ echo +++multievent.init
 source /mnt/local/sysconfig/acq400.sh
 
 [ ! -z "$MULTI_EVENT" ] && echo "MULTI_EVENT=$MULTI_EVENT" > /dev/shm/multi_event_settings
-
+[ ! -z "$STREAM_OPTS" ] && echo "STREAM_OPTS=\"$STREAM_OPTS\"" >> /etc/sysconfig/acq400_streamd.conf
 
 cat >>/etc/inetd.conf << EOF
 53555 stream tcp nowait root mev_get_next_event mev_get_next_event /tmp
@@ -14,7 +14,22 @@ EOF
 
 killall -s SIGHUP inetd
 
-[ ! -z "$MULTI_EVENT_DISK" ] && nice mev_disk_mon $MULTI_EVENT_DISK &
+case $MULTI_EVENT_DISK in
+usb*)
+	nice mev_disk_mon $MULTI_EVENT_DISK & ;;
+nfs*)
+	mkdir -p /mnt/nfs
+	mp=${MULTI_EVENT_DISK#nfs,*}
+	mount -t nfs -o nolock $mp /mnt/nfs
+	if [ $? -ne -0 ]; then
+		echo "ERROR: NFS MOUNT FAIL MULTI_EVENT_DISK=$MULTI_EVENT_DISK"
+	else
+		nice mev_nfs_mon /mnt/nfs & 
+	fi;;
+*)
+	nice mev_null_mon $MULTI_EVENT_DISK & ;;
+esac
+
 
 ln -s /usr/local/bin/multi_event /etc/acq400/1/
 

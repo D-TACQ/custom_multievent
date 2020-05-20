@@ -1,0 +1,11 @@
+#!/bin/sh
+# mev_disk_mon
+
+NFSDIR=${1:-/mnt/nfs}
+
+cd /tmp
+while [ 1 ]; do
+	find . -name event-*.dat -exec mv {} $NFSDIR/{} \;
+	sleep 2
+done
+

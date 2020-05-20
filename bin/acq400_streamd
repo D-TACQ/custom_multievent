@@ -1,0 +1,38 @@
+#!/bin/sh
+# if there's a previous hanging instance, kill it and drop out
+# client can retry at an appropriate moment to restart..
+
+if [ ! -e /var/www/d-tacq/rc-user-complete ]; then
+	sleep 2
+	echo NOT READY
+	exit 0
+fi
+
+source /usr/local/bin/init_stream
+
+SITE=$1
+LOG=/var/log/acq400_streamd_$SITE.log
+
+init_stream $SITE >$LOG 2>&1
+jobs >>$LOG
+echo $SAMPLE_SIZE $OVERSAMPLING $SITE >>$LOG
+
+STREAM_OPTS="$STREAM_OPTS --state-file /dev/shm/state"
+
+if [ "x$ACQ400D_TRIG" = "xsoft_trigger" ]; then
+	STREAM_OPTS="$STREAM_OPTS --soft-trigger=1"	
+fi
+
+ACQ400_STREAM=acq400_stream
+
+echo $ACQ400_STREAM --$SSPEC $STREAM_OPTS $SAMPLE_SIZE $OVERSAMPLING $SITE  >>$LOG
+nice -n -20 $ACQ400_STREAM --$SSPEC $STREAM_OPTS $SAMPLE_SIZE $OVERSAMPLING $SITE 2>/dev/null
+
+fix_state; cat /dev/shm/state 1>&2
+
+
+
+
+
+
+

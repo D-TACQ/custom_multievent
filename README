@@ -7,11 +7,12 @@ this data is presented as a service, and optionally stored to local disk
 set these files:
 
 /mnt/local/acq420_custom
-DRVR_CUSTOM=event1_feeds_ev_device=1
+DRVR_CUSTOM="event1_feeds_ev_device=1 acq400_event_count_limit=0"
 
 /mnt/local/sysconfig/acq400.sh
-MULTI_EVENT=pre,post,max
-MULTI_EVENT_DISK=yes
+MULTI_EVENT=pre,post,max,1
+MULTI_EVENT_DISK=yes,no,maybe,todo
+MULTI_EVENT_DISK=nfs,naboo:/home/dt100/DATA
 
 # multi_event_backoff
 # add this to mnt/local/sysconfig/acq400.sh
