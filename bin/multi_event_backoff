@@ -1,0 +1,56 @@
+#!/usr/bin/env expect
+# usage /mnt/local/multi_event_backoff SECS
+# monitor the usb stick. 
+# when an event file has been written, sleep SECS, then re-enable previous setting of multi_event
+# works best with NEVENTS=1, but other values should be OK.
+
+log_user 0
+set BACKOFF_SECS [lindex $::argv 0]
+if { $BACKOFF_SECS == "" } {
+	set BACKOFF_SECS 20
+}
+
+# get existing multi_event definition. Make it into a command
+# We have to lose the 4th field..
+set evdef [split [exec get.site 1 multi_event] ,]
+set MV  "[join [lrange $evdef 0 2] ,]"
+
+# watch for event files arriving on the stick
+spawn inotifywait -e CLOSE_WRITE -rm /stick/
+
+set timeout 1
+set backoff -1
+
+puts "ENABLE"                         
+exec set.site 1 multi_event $MV 
+
+while { 1 } {
+	expect {
+		-re {/stick/ CLOSE_WRITE,CLOSE (.*).dat} {
+			puts "\ngotcha $expect_out(1,string)"
+			set backoff 0
+		} 
+		timeout {
+			if { $backoff >= 0 } {
+				incr backoff
+				if { $backoff >= $BACKOFF_SECS } {
+					set backoff -1
+					puts "ENABLE"
+					exec set.site 1 multi_event $MV
+				} else {
+					if { $backoff == 0 } {
+						puts -nonewline "backoff "
+					} else {
+						puts -nonewline "."
+					}
+					flush stdout
+				}
+			} else {
+				puts -nonewline "+"
+				flush stdout
+			}
+		}
+	}
+}
+
+
