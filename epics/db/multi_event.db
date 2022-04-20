@@ -54,3 +54,9 @@ record (stringin, "${UUT}:${SITE}:MEV:r" ) {
 	field(SCAN, "2 second" )
 }
 
+record (stringin, "${UUT}:${SITE}:MEV:LATEST" ) {
+	field(DTYP, "stream")
+	field(INP,  "@multi_event.proto get_MEV_latest ${SPORT}")
+	field(SCAN, "2 second" )
+}
+

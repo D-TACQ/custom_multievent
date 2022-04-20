@@ -12,3 +12,8 @@ get_MEV {
 	out "multi_event";
 	in "%s";
 }
+
+get_MEV_latest {
+	out "multi_event_latest";
+	in "%s";
+}

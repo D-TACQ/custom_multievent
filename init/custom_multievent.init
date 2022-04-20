@@ -52,4 +52,5 @@ ln -s /usr/local/bin/multi_event /etc/acq400/1/
 
 mknod /dev/acq400.14.ev c 242 64
 
+echo "none" > /etc/acq400/1/multi_event_latest
 
