@@ -4,6 +4,16 @@ echo +++multievent.init
 
 source /mnt/local/sysconfig/acq400.sh
 
+# initial pre,post,max,seq
+# MULTI_EVENT=10000,10000,100,1   
+# inshot updates:
+# set.site 1 multi_event 10000,35000,100,6    # increment seq to force change
+
+# data handling options
+# MULTI_EVENT_DISK=nfs,naboo:/home/dt100/DATA
+# MULTI_EVENT_DISK=custom,/mnt/local/mycustomscript
+
+
 [ ! -z "$MULTI_EVENT" ] && echo "MULTI_EVENT=$MULTI_EVENT" > /dev/shm/multi_event_settings
 [ ! -z "$STREAM_OPTS" ] && echo "STREAM_OPTS=\"$STREAM_OPTS\"" >> /etc/sysconfig/acq400_streamd.conf
 
@@ -25,6 +35,13 @@ nfs*)
 		echo "ERROR: NFS MOUNT FAIL MULTI_EVENT_DISK=$MULTI_EVENT_DISK"
 	else
 		nice mev_nfs_mon /mnt/nfs & 
+	fi;;
+custom*)
+ 	custom_app=${MULTI_EVENT_DISK#custom,}
+	if [ -e custom_app ]; then
+		nice custom_app &
+	else
+		echo "ERROR: custom_app $custom_app does not exist"
 	fi;;
 *)
 	nice mev_null_mon $MULTI_EVENT_DISK & ;;
