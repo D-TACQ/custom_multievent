@@ -1,0 +1,15 @@
+# source me
+
+source /mnt/local/sysconfig/acq400.sh
+pre=$(echo $MULTI_EVENT | awk -F, '{ print $1 }')
+post=$(echo $MULTI_EVENT | awk -F, '{ print $2 }')
+
+init_multi_event_site () {
+	site=$1
+	cprams="UUT=${HOST},SITE=${site},SPORT=S${site}"
+	dblr '"db/multi_event.db","'${cprams},PRE=${pre},POST=${post}'"'
+}
+
+init_multi_event_site 1
+
+

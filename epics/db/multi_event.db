@@ -1,0 +1,50 @@
+record (longout, "${UUT}:${SITE}:MEV:PRE" ) {
+	field(DTYP, "stream")
+	field(DESC, "MEV presamples")
+	field(OUT,  "@slowmon.proto setSlowmonFs S0")
+	field(DRVL, "0")
+	field(DRVH, "100000")
+	field(EGU,  "samples")
+	field(VAL,  "${PRE}")
+	field(PINI, "YES")
+	field(FLNK, "${UUT}:${SITE}:MEV:c")
+}
+
+record (longout, "${UUT}:${SITE}:MEV:POST" ) {
+	field(DTYP, "stream")
+	field(DESC, "MEV presamples")
+	field(OUT,  "@slowmon.proto setSlowmonFs S0")
+	field(DRVL, "0")
+	field(DRVH, "100000")
+	field(EGU,  "samples")
+	field(VAL,  "${POST}")
+	field(PINI, "YES")	
+	field(FLNK, "${UUT}:${SITE}:MEV:c")
+}
+
+record (longout, "${UUT}:${SITE}:MEV:MAX" ) {
+	field(DTYP, "stream")
+	field(DESC, "MEV presamples")
+	field(OUT,  "@slowmon.proto setSlowmonFs S0")
+	field(DRVL, "0")
+	field(DRVH, "100")
+	field(EGU,  "events")
+	field(VAL,  "10")
+	field(PINI, "YES")	
+	field(FLNK, "${UUT}:${SITE}:MEV:c")
+}
+
+record (calcout, "${UUT}:${SITE}:MEV:c")
+{
+        field(DTYP, "stream")
+        field(INPA, "${UUT}:${SITE}:MEV:PRE")
+        field(INPB, "${UUT}:${SITE}:MEV:POST")
+	field(INPC, "${UUT}:${SITE}:MEV:MAX")
+        field(INPD, "${UUT}:${SITE}:MEV:c")
+        field(CALC, "VAL=D+1")
+	field(OUT,  "@multi_event.proto setMEV ${SPORT}")
+        field(OOPT, "On Change")
+        field(DOPT, "Use OCAL")
+        field(OCAL, "-999")
+}
+

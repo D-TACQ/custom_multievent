@@ -11,8 +11,9 @@ mkdir -p opkg/usr/local/bin \
 	opkg/usr/local/CARE \
 	opkg/usr/local/epics \
 	release
- 
-cp -a CARE/* opkg/usr/local/CARE
+
+cp -r epics  opkg/usr/local
+cp -r CARE/* opkg/usr/local/CARE
 cp bin/* opkg/usr/local/bin
 cp init/* opkg/usr/local/init
 cp README opkg/usr/local/init/$PKG-README
