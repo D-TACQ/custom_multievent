@@ -7,3 +7,8 @@ set_MEV {
 	out "multi_event %(A)d,%(B)d,%(C)d,%(D)d";
 	in;
 }
+
+get_MEV {
+	out "multi_event";
+	in "%s";
+}

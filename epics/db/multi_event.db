@@ -41,10 +41,16 @@ record (calcout, "${UUT}:${SITE}:MEV:c")
         field(INPB, "${UUT}:${SITE}:MEV:POST")
 	field(INPC, "${UUT}:${SITE}:MEV:MAX")
         field(INPD, "${UUT}:${SITE}:MEV:c")
-        field(CALC, "VAL=D+1")
-	field(OUT,  "@multi_event.proto setMEV ${SPORT}")
+        field(CALC, "D+1")
+	field(OUT,  "@multi_event.proto set_MEV ${SPORT}")
         field(OOPT, "On Change")
         field(DOPT, "Use OCAL")
         field(OCAL, "-999")
+}
+
+record (stringin, "${UUT}:${SITE}:MEV:r" ) {
+	field(DTYP, "stream")
+	field(INP,  "@multi_event.proto get_MEV ${SPORT}")
+	field(SCAN, "2 second" )
 }
 
