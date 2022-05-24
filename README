@@ -13,6 +13,7 @@ DRVR_CUSTOM="event1_feeds_ev_device=1 acq400_event_count_limit=0"
 MULTI_EVENT=pre,post,max,1
 MULTI_EVENT_DISK=yes,no,maybe,todo
 MULTI_EVENT_DISK=nfs,naboo:/home/dt100/DATA
+MULTI_EVENT_DISK=custom,/mnt/local/mycustomscript
 
 # multi_event_backoff
 # add this to mnt/local/sysconfig/acq400.sh
