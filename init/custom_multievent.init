@@ -49,6 +49,12 @@ esac
 
 
 ln -s /usr/local/bin/multi_event /etc/acq400/1/
+for pv in MEV:PRE MEV:POST MEV:MAX; do
+	(cd /etc/acq400/1/; ln -s /usr/local/bin/caput_$(hostname):1 $pv)
+done
+for pv in MEV:LATEST; do
+	(cd /etc/acq400/1/; ln -s /usr/local/bin/caget_$(hostname):1 $pv)
+done
 
 mknod /dev/acq400.14.ev c 242 64
 
