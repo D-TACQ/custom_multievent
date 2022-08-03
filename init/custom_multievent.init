@@ -17,6 +17,8 @@ source /mnt/local/sysconfig/acq400.sh
 [ ! -z "$MULTI_EVENT" ] && echo "MULTI_EVENT=$MULTI_EVENT" > /dev/shm/multi_event_settings
 [ ! -z "$STREAM_OPTS" ] && echo "STREAM_OPTS=\"$STREAM_OPTS\"" >> /etc/sysconfig/acq400_streamd.conf
 
+[ ! -z "$MultiEventServerMaxfilesLimit" ] && echo "MultiEventServerMaxfilesLimit=$MultiEventServerMaxfilesLimit" >> /etc/sysconfig/acq400_streamd.conf
+
 cat >>/etc/inetd.conf << EOF
 53555 stream tcp nowait root mev_get_next_event mev_get_next_event /tmp
 53556 stream tcp nowait root mev_get_next_event mev_get_next_event /stick
