@@ -2,10 +2,18 @@
 # mev_disk_mon
 
 NFSDIR=${1:-/mnt/nfs}
+TO=${2:-20}
 
 cd /tmp
-while [ 1 ]; do
-	find . -name event-*.dat -exec mv {} $NFSDIR/{} \;
-	sleep 2
-done
+inotifywait -q -m -e close_write /etc/acq400/1/multi_event_latest | 
+	while read -r filename event; do
+		filename=$(cat "$filename")
+		timeout $TO cp $filename $NFSDIR/
+		if [ $? -eq 0 ]; then
+			echo $filename > $NFSDIR/latest
+		else
+			echo "ERROR $? $filename" > $NFSDIR/latest
+		fi
+		rm $filename
+	done
 
