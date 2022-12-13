@@ -1,8 +1,15 @@
 #!/bin/sh
-# mev_disk_mon
+# mev_nfs_mon
 
 NFSDIR=${1:-/mnt/nfs}
 TO=${2:-20}
+
+(
+sleep 2
+while [ ! -e /etc/acq400/1/multi_event_latest ]; do
+	echo waiting for /etc/acq400/1/multi_event_latest
+	sleep 2
+done
 
 cd /tmp
 inotifywait -q -m -e close_write /etc/acq400/1/multi_event_latest | 
@@ -10,10 +17,12 @@ inotifywait -q -m -e close_write /etc/acq400/1/multi_event_latest |
 		filename=$(cat "$filename")
 		timeout $TO cp $filename $NFSDIR/
 		if [ $? -eq 0 ]; then
-			echo $filename > $NFSDIR/latest
+			echo $filename | tee $NFSDIR/latest
 		else
-			echo "ERROR $? $filename" > $NFSDIR/latest
+			echo "ERROR $? $filename" | tee $NFSDIR/latest
 		fi
 		rm $filename
 	done
+) 2>&1 | /usr/bin/logger -t mev_nfs_mon
+
 
